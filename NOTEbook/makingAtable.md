@@ -26,6 +26,37 @@ hire_date DATE
 
 * `DATETIME`, stores both the date and time consecutively.
 
+# To create a SQL file, follow these commands in order:
+
+1. `CREATE DATABASE` base_name
+* `CREATE DATABASE IF NOT EXIST` my_business
+
+2. `USE` my_business;
+* Since there can be several databases, we need to use this USE command, so our seleced database can receive and work properly according to what we need.
+  
+3. `CREATE TABLE` table_name 
+   (colunm1 data_type restrictions,
+    column2 data_type restrictions,
+     ... ); 
+* Here we are to set all the columns our database will have. Next to each column, we are going to set the type as well as the restriccions. 
+
+# 3.1. `Common type used`: 
+* `INT` stands for an integer (numero entero).
+* `VARCAHR` stands for "n" characters in text input. 
+* `YEAR` stands for the 4 digits year format (1987).
+...;
+
+# 3.2. `Basic Restrictions`: 
+* `PRIMARY KEY` stands for unique key, set to every row. ID
+* `NOT NULL` means that it's not allowed an empty space/part.
+* `AUTO_INCREMENT` means a value generates automatically. 
+ ...;
+
+4. `INSERT INTO` table_name (column1, column2, column3 ...)
+                 VALUES (value1, value2, value3...);
+
+5. `SELECT` this command allows us to see and consult the information we have saved within the table.
+# SELECT FROM table_name ...
 
 
 
