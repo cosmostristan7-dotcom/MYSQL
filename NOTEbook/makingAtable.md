@@ -1,6 +1,7 @@
 ## To create a table, you need to call it first:
 ```sql 
-CREATE TABLE employees (
+CREATE TABLE employees; 
+(
 employee_id INT, 
 first_name VARCHAR(50),
 last_name VARCHAR(50), 
@@ -58,5 +59,7 @@ hire_date DATE
 5. `SELECT` this command allows us to see and consult the information we have saved within the table.
 # SELECT FROM table_name ...
 
+* `;` This, when placed at the end of a statement, tells SQL that whatever line it is reading it is a command. No matter if the statement is long and ends at the second line, once the program reach a semi colon, it knows the statement or command has ended.
+* `...`  
 
 

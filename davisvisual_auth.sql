@@ -1,5 +1,5 @@
 -- 1. Create a database specifically for your Davisvisusl project
-CREATE DATABASE
+CREATE DATABASE 
 IF NOT EXISTS davisvisual_db;
 USE davisvisual_db;
 
