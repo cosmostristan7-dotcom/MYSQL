@@ -1,0 +1,47 @@
+-- SQLBook: Code
+-- Active: 1782266690822@@127.0.0.1@3306
+-- 1. Creates a database for this project
+CREATE DATABASE IF NOT EXISTS auth_db;
+
+USE auth_db;
+
+-- 2. Creates a table to securely hold user account details
+CREATE TABLE IF NOT EXISTS users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 3. Inserts a dummy test user for this project
+INSERT INTO
+    users (
+        username,
+        email,
+        password_hash
+    )
+VALUES (
+        'test_user',
+        'test_user@example.com',
+        '$2b$10$EixVaat1A9HjbeGc3.Xv2OmeotGPyYty3ZhycrUe26S6u7N6B9K6C'
+    );
+
+--- 4. Creates a table to hold user session details
+CREATE TABLE IF NOT EXISTS sessions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    session_token VARCHAR(255) NOT NULL UNIQUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+);
+
+-- 5.1. Creates a table to hold movie details
+CREATE TABLE IF NOT EXISTS movies_list (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    release_year INT,
+    genre VARCHAR(50),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
