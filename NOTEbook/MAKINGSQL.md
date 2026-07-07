@@ -1,12 +1,12 @@
-## To create a table, you need to call it first:
+s## To create a table, you need to call it first:
 ```sql 
-CREATE TABLE employees; 
-(
-employee_id INT, 
-first_name VARCHAR(50),
-last_name VARCHAR(50), 
-hourly_pay DECIMAL(5, 2),
-hire_date DATE 
+--  Correct
+CREATE TABLE employees (
+    employee_id INT, 
+    first_name VARCHAR(50),
+    last_name VARCHAR(50), 
+    hourly_pay DECIMAL(5, 2),
+    hire_date DATE 
 );
 ```
 1. The list below the call are known as: `COLUMN NAMES.`
@@ -96,4 +96,64 @@ You do not join tables by “typing at the end which primary key you need.”
 
 You join tables by `using the foreign key column` that already points to the other table’s primary key.
 
-* `...`, 
+```html
+<p><strong>LOGICAL OPERATORS</strong></p>
+
+<h1 style="color: green; text-align: left;">IN</h1>
+<p>evaluates actual values. It runs the subquery first, gathers a literal list of values (like a list of IDs), and then checks if the outer query's value matches anything inside that list.</p>
+
+```SQL
+CREATES
+
+```
+
+<h1 style="color: green; text-align: left;">EXISTS</h1>>
+<p>evaluates a boolean condition (True/False). It looks at the rows one by one. The moment it finds a single match in the subquery that satisfies the condition, it stops looking (True) and moves to the next row. It doesn't actually pull or return any data from the subquery.</p>
+
+<h2 style="color: red; text-align: center;">The Scenario</h2>
+<p>Imagine you have two tables: customers and orders. You want to find <spans style="color: green;">only the customers who have placed at least one order.</spans></p>
+
+<h2 text-align: left;>The SQL Query</h2>
+
+```SQL
+SELECT customer_id, first_name, last_name
+FROM customers c
+WHERE EXISTS (
+    SELECT 1 
+    FROM orders o 
+    WHERE o.customer_id = c.customer_id
+);
+```
+
+<p><strong>DATABASE OBJECT (or SCHEMA OBJECT).</strong></p>
+
+<h1 style="color: white; text-align: center;">CREATE INDEX</h1>
+
+```SQL
+-- 1. Creates hash index (only to specific elements). --
+CREATE INDEX index_user_email ON users USING HASH(email); 
+
+-- 2. Response through this. --
+SELECT * FROM users WHERE email= 'ana@example.com';
+```
+<p>The <spans>CREATE INDEX</spans> sintanx is used to specify from a list of database 1 specific element (an email, a name, a number, an average, etc). On the other hand,<p>
+
+
+<p><strong>FULL TEXT-INDEX or (Full-Text Search).</strong></p>
+
+<h1 style="color: white; text-align: center;">CREATE FULLTEXT INDEX</h1>
+
+```SQL
+-- 1. Creates FULLTEXT INDEX. --
+CREATE FULLTEXT INDEX idx_posts_content ON posts(content);
+
+-- 2. Advanced search. --
+SELECT * FROM posts
+WHERE MATCH(content) AGAINST('receip + pasta' IN  BOOLEAN MODE);
+```
+
+<p>While a standard index looks for exact matches or prefixes, a Full-Text Index is designed to search for individual words or phrases inside large blocks of text (like articles or product descriptions).</p>
+
+
+
+
