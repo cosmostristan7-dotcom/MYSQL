@@ -69,6 +69,40 @@ A junction table is a physical table that you build inside your database using a
 * It permanently holds data (pairs of IDs) to link two other tables together.
 * Analogy: It’s a physical filing cabinet that maps which articles have which tags. 
 
+## INNER JOIN, 
+<p>An INNER JOIN only returns rows where there is a perfect match in both tables. If a row in Table A doesn’t find a matching value in Table B, it gets completely left out of the final results.<p>
+
+<h1>Mental Image:</h1> <strong>The shaded intersection right in the middle of a Venn diagram.</strong>
+
+<p>Example Use Case: Showing a list of orders alongside the details of the customers who placed them. (If a customer hasn't ordered anything yet, they won't appear).</p>
+
+## LEFT JOIN
+
+<p> A LEFT JOIN returns every single row from the left table (Table A), regardless of whether a match exists in Table B. If there is a match, it pulls in the data from Table B. If there is no match, it still displays Table A's data but fills Table B's columns with NULL (empty) values.</p>
+
+<h1>Mental Image:</h1> <strong>The entire left circle is filled in, along with the overlapping middle.</strong>
+
+<p>Example Use Case: Listing all registered clients, plus any order data they might have. Clients who haven't bought anything will still show up on your list, just with NULL in the order column.</p>
+
+## RIGHT JOIN
+
+<p>A RIGHT JOIN is the exact mirror image of a Left Join. It returns every single row from the right table (Table B), whether a match exists in Table A or not. If a row in Table B doesn’t have a match in Table A, Table A's columns come back as NULL.</p>
+
+<h1>Mental Image:</h1> <strong>The entire right circle is filled in, along with the overlapping middle.</strong>
+
+<p>Example Use Case: Tracking system inventory. You want to see every product variant in your inventory table, even if no client has ever added it to their shopping cart (Table A).</p>
+
+`Note for your notes:`
+<!--Developers rarely use RIGHT JOIN in practice because you can always just switch the order of the tables in your code and use a LEFT JOIN to achieve the exact same result. Keeping everything "Left-to-Right" makes code much easier to read!-->
+
+## FULL JOIN
+
+<p><spans>A FULL JOIN returns absolutely everything from both tables.</spans> It combines the behavior of both a Left Join and a Right Join. If there is a match, it connects them. If a row only exists in Table A, or only exists in Table B, it includes it anyway and uses NULL for the missing partner's data.</p>
+
+<h1>Mental Image:</h1> <strong>Both circles are entirely filled in—nothing is left behind.</strong>
+
+<p>Example Use Case: Merging two separate department databases (like Sales and Marketing) to find all unique email addresses across the entire company, whether they are active in one department, the other, or both.</p>
+
 # SELECT and INNER JOIN (The Query)
 SELECT, FROM, and INNER JOIN are SQL commands used to read data from your tables.
 * They do not create or store anything permanently.
@@ -153,6 +187,80 @@ WHERE MATCH(content) AGAINST('receip + pasta' IN  BOOLEAN MODE);
 ```
 
 <p>While a standard index looks for exact matches or prefixes, a Full-Text Index is designed to search for individual words or phrases inside large blocks of text (like articles or product descriptions).</p>
+
+<h1 style="color darkgreen; text-align: center;">The First, Second, and Third Normal Forms (1NF, 2NF, 3NF).</h1>
+
+<p>Database normalization is all about organizing your data to avoid repetition (redundancy) and protect your data's integrity. Think of it like organizing a messy closet: you group similar items together so you don't end up with shoes mixed in with shirts.</p>
+
+<p>Let's use your library/book loan project as an example. Imagine we started with a single, messy unnormalized table like this:</p>
+
+<!-- EXAMPLE of a table. -->
+
+```SQL
+-- 1. THE First Normal Form: (1NF): Atomic Values.
+```
+<p>The golden rule of 1NF is: <spans>Every cell must contain a single, atomic (indivisible) value.</spans> You cannot have lists or multiple pieces of data shoved into one column.</p>
+
+<p>The Problem: In our starting table, David's row has two books (The Hobbit, Dune) in a single cell. A database can't easily search, sort, or update that.</p>
+
+<p>The Fix: We break those values up into their own rows so that every row-and-column intersection has exactly one value.</p>
+
+<strong>Now we have a composite Primary Key (a combination of LoanID and BookTitle) to uniquely identify each row.</strong>
+
+<!-- 2. Second Normal Form (2NF): Full Functional Dependency> -->
+
+<p> To reach 2NF, a table must first be in 1NF, and every non-key column must depend on the entire primary key, not just a part of it.</p>
+
+<p>The Problem: Our primary key is a combination of LoanID + BookTitle.</p>
+
+<p>Does UserName depend on both? No, David is David regardless of what book he takes. UserName only depends on the UserID.</p>
+
+<p>This causes massive data repetition (we are repeating "David" and "2026-07-01" for every single book he borrows).</p>
+
+<p>The Fix: We split the table into separate entities so that attributes only live where they fully belong.
+Our Tables in 2NF:</p>
+
+<strong>Table A: Users (Using UserID as Key)</strong>
+
+<!-- 3. Third Normal Form (3NF): No Transitive Dependencies. -->
+
+<p>To reach 3NF, the table must be in 2NF, and non-key columns cannot depend on other non-key columns. In database terms: "Every column must depend on the key, the whole key, and nothing but the key."</p>
+
+<p>Let’s add a wrinkle to see the problem. Imagine our Book Loans table also included the author's name and email: BookTitle, AuthorName, AuthorEmail.</p>
+
+<p>The Problem: AuthorEmail depends on AuthorName, which depends on BookTitle. Neither of them have anything to do with the Loan itself. This is a transitive dependency. If you delete the loan, you accidentally delete the author's email from your entire system!</p>
+
+<strong>The Fix: Separate the independent data into its own dedicated table.</strong>
+
+<!-->... Summary Checklist for your Project ...
+
+1NF: No lists in a single cell.
+
+2NF: Split tables so you don't repeat user profiles or book descriptions every time a loan happens.
+
+3NF: Ensure that changing a book's details or an author's info doesn't require updating the loan records. -->
+
+<p>Tne inner query is made first, then out of it, the outer quiter will be born from.</p>
+
+<p>In SQL, the asterisk * does not mean multiplication when it is inside an aggregate function like COUNT().</p>
+
+<strong>Instead, it means "all rows" or "everything."</strong>
+
+<p>When you write COUNT(*), you are simply telling the database: "Count every single row in this group, regardless of what data is inside the columns." It is the standard, safest way to count rows in SQL.</p>
+
+<!--Why HAVING (C) wins over WHERE (A)
+This is the core concept of database filtering, and it all comes down to timing.
+
+WHERE filters individual rows before they are grouped. The database looks at the raw data row-by-row. Because the groups haven't been created yet, the database doesn't know what the final "count" is. If you try to use WHERE COUNT(*)..., SQL will throw an error.
+
+HAVING filters groups after they are aggregated. Once the database gathers the individual rows into groups (like grouping movies by genre or director), it calculates the COUNT(*). Then, the HAVING clause steps in to filter out any groups that don't meet the criteria.
+
+Think of it this way: You use WHERE to filter individual items, but you must use HAVING to filter entire groups.-->
+
+
+
+
+
 
 
 
